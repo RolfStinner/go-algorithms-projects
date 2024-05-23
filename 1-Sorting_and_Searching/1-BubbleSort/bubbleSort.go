@@ -34,12 +34,12 @@ func printArray(arr []int, numItems int) {
 // Verify that the slice is sorted.
 func checkSorted(arr []int) {
 	for i := 1; i < len(arr); i++ {
-		if arr[i-1] <= arr[i] {
-			fmt.Println("The array is sorted.")
-		} else {
+		if arr[i-1] > arr[i] {
 			fmt.Println("The array is NOT sorted.")
+			return
 		}
 	}
+	fmt.Println("The array is sorted.")
 }
 
 // Use bubble sort to sort the slice.
