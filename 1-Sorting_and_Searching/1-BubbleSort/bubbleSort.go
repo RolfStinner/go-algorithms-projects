@@ -6,68 +6,76 @@ import (
 	"time"
 )
 
-// Make a slice containing pseudorandom numbers in [0, max)
+// Make an Array containing pseudorandom numbers in [0, max)
 // The function should simply create a slice with 'numItems' entries, use a loop to
 // fill in the values, and return the slice. 'rand.Intn(max)' returns a value in the
 // interval [0, max)
-func makeRandomSlice(numItems, max int) []int {
+func makeRandomArray(numItems, max int) []int {
 	// Initialize a pseudorandom number generator.
-	random := rand.New(rand.NewSource(time.Now().UnixNano())) // Initialize with a changing seed
+	random := rand.New(rand.NewSource(time.Now().UnixNano())) // Initialize with a changing seed CHANGED(rolf): Author's solution with rand.Seed() is deprecated.
 
-	slice := make([]int, numItems)
+	arr := make([]int, numItems)
 	for i := 0; i < numItems; i++ {
-		slice[i] = random.Intn(max)
+		arr[i] = random.Intn(max)
 	}
 
-	return slice
+	return arr
 }
 
 // Print at most numItems slices.
-func printSlice(slice []int, numItems int) {
-	if len(slice) < numItems {
-		numItems = len(slice)
-	}
-
-	for i := 0; i < numItems; i++ {
-		fmt.Print(slice[i], " ")
+func printArray(arr []int, numItems int) {
+	if len(arr) <= numItems {
+		fmt.Println(arr)
+	} else {
+		fmt.Println(arr[:numItems])
 	}
 }
 
 // Verify that the slice is sorted.
-func checkSorted(slice []int) {
-	for i := 1; i <= len(slice); i++ {
-		if slice[i-1] < slice[i] {
-			fmt.Println("The slice is sorted.")
+func checkSorted(arr []int) {
+	for i := 1; i < len(arr); i++ {
+		if arr[i-1] <= arr[i] {
+			fmt.Println("The array is sorted.")
 		} else {
-			fmt.Println("The slice is NOT sorted.")
-			
+			fmt.Println("The array is NOT sorted.")
 		}
 	}
 }
 
 // Use bubble sort to sort the slice.
-func bubbleSort(slice []int) []int {
-	n := len(slice)
-
-	for true {
-		var swapped = false
+func bubbleSort(arr []int) {
+	n := len(arr)
+	swapped := true
+	for swapped {
+		swapped = false
 		for i := 1; i < n; i++ {
 			// if this pair is out of order
-			if slice[i-1] > slice[i] {
+			if arr[i-1] > arr[i] {
 				// swap them and remember something changed
-				slice[i-1], slice[i] = slice[i], slice[i-1]
+				arr[i-1], arr[i] = arr[i], arr[i-1]
 				swapped = true
 			}
 		}
-		if swapped == false {
-			break
-		}
 	}
-	return slice
 }
 
 func main() {
-	mySlice := makeRandomSlice(100, 1000)
-	bubbleSort(mySlice)
-	printSlice(mySlice, 50)
+	// Get the number of items and maximum item value.
+	var num_items, max int
+	fmt.Printf("# Items: ")
+	fmt.Scanln(&num_items)
+	fmt.Printf("Maximum value: ")
+	fmt.Scanln(&max)
+
+	// Make and display the unsorted array.
+	arr := makeRandomArray(num_items, max)
+	printArray(arr, 50)
+	fmt.Println()
+
+	// Sort and display the result.
+	bubbleSort(arr)
+	printArray(arr, 50)
+
+	// Verify that it's sorted.
+	checkSorted(arr)
 }
